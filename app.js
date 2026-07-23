@@ -47,9 +47,10 @@ function updateThemeIcon(theme) {
 
 // KPI Calculations
 function renderKPIs() {
-  const total = rawProjectData.length;
-  const doneCount = rawProjectData.filter(p => p.status === 'Done').length;
-  const progressCount = total - doneCount;
+  const total = 60;
+  const doneCount = 17;
+  const progressCount = 24;
+  const queueCount = 19;
   const rate = Math.round((doneCount / total) * 100);
 
   document.getElementById('kpi-total').textContent = total;
@@ -64,20 +65,17 @@ function renderCharts() {
   const textColor = isLight ? '#0f172a' : '#f8fafc';
   const gridColor = isLight ? '#e2e8f0' : 'rgba(255, 255, 255, 0.08)';
 
-  // 1. Status Donut Chart
-  const doneCount = rawProjectData.filter(p => p.status === 'Done').length;
-  const progressCount = rawProjectData.length - doneCount;
-
+  // 1. Status Donut Chart (Done: 17, In Progress: 24, Queue: 19)
   const ctxStatus = document.getElementById('statusChart').getContext('2d');
   if (statusChartInstance) statusChartInstance.destroy();
 
   statusChartInstance = new Chart(ctxStatus, {
     type: 'doughnut',
     data: {
-      labels: ['Done', 'Planned / In Progress'],
+      labels: ['Done (17)', 'In Progress (24)', 'Queue (19)'],
       datasets: [{
-        data: [doneCount, progressCount],
-        backgroundColor: ['#10b981', '#eab308'],
+        data: [17, 24, 19],
+        backgroundColor: ['#10b981', '#eab308', '#6366f1'],
         borderWidth: 2,
         borderColor: isLight ? '#ffffff' : '#1e293b'
       }]
@@ -95,16 +93,7 @@ function renderCharts() {
     }
   });
 
-  // 2. Monthly Timeline Active Projects Bar Chart
-  const monthCounts = MONTHS.map(m => {
-    return rawProjectData.filter(p => {
-      const sIdx = MONTHS.indexOf(p.start);
-      const eIdx = MONTHS.indexOf(p.end);
-      const mIdx = MONTHS.indexOf(m);
-      return mIdx >= sIdx && mIdx <= eIdx;
-    }).length;
-  });
-
+  // 2. Monthly Timeline Progress, Plan UAT, & Target UAT Bar Chart
   const ctxTimeline = document.getElementById('timelineChart').getContext('2d');
   if (timelineChartInstance) timelineChartInstance.destroy();
 
@@ -112,14 +101,32 @@ function renderCharts() {
     type: 'bar',
     data: {
       labels: MONTHS,
-      datasets: [{
-        label: 'Active Projects',
-        data: monthCounts,
-        backgroundColor: 'rgba(59, 130, 246, 0.7)',
-        borderColor: '#3b82f6',
-        borderWidth: 1.5,
-        borderRadius: 6
-      }]
+      datasets: [
+        {
+          label: 'Progress',
+          data: [18, 32, 33, 36, 38, 40, 35, 30, 30, 20, 15, 13],
+          backgroundColor: 'rgba(59, 130, 246, 0.75)',
+          borderColor: '#3b82f6',
+          borderWidth: 1.5,
+          borderRadius: 4
+        },
+        {
+          label: 'Plan UAT',
+          data: [0, 0, 0, 1, 3, 12, 2, 7, 5, 4, 12, 13],
+          backgroundColor: 'rgba(16, 185, 129, 0.8)',
+          borderColor: '#10b981',
+          borderWidth: 1.5,
+          borderRadius: 4
+        },
+        {
+          label: 'Target UAT',
+          data: [0, 0, 0, 1, 3, 13, 0, 0, 0, 0, 0, 0],
+          backgroundColor: 'rgba(245, 158, 11, 0.85)',
+          borderColor: '#f59e0b',
+          borderWidth: 1.5,
+          borderRadius: 4
+        }
+      ]
     },
     options: {
       responsive: true,
@@ -135,7 +142,11 @@ function renderCharts() {
         }
       },
       plugins: {
-        legend: { display: false }
+        legend: {
+          display: true,
+          position: 'top',
+          labels: { color: textColor, font: { family: 'Plus Jakarta Sans', size: 11 } }
+        }
       }
     }
   });

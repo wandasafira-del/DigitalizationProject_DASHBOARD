@@ -17,7 +17,7 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <!-- Custom CSS -->
-  <link rel="stylesheet" href="styles.css?v=2.3">
+  <link rel="stylesheet" href="styles.css?v=3.0">
 </head>
 <body>
   <div class="dashboard-container">
@@ -41,10 +41,10 @@
         <i class="ri-layout-grid-fill"></i> Dashboard Utama & Gantt Chart
       </button>
       <button class="nav-tab" data-page="reports">
-        <i class="ri-file-list-3-line"></i> Detail & Laporan Proyek
+        <i class="ri-pages-line"></i> Halaman Lain
       </button>
       <button class="nav-tab" data-page="master">
-        <i class="ri-database-2-line"></i> Master Data & Pengaturan
+        <i class="ri-pages-line"></i> Halaman Lain
       </button>
     </nav>
 
@@ -67,16 +67,16 @@
             <span>Selesai (Done)</span>
             <i class="ri-checkbox-circle-line" style="color: var(--color-green)"></i>
           </div>
-          <div class="stat-value" id="kpi-done">0</div>
+          <div class="stat-value" id="kpi-done">17</div>
           <div class="stat-subtext">Proyek siap operasional</div>
         </div>
 
         <div class="stat-card in-progress">
           <div class="stat-header">
-            <span>Planned / In Progress</span>
+            <span>In Progress</span>
             <i class="ri-time-line" style="color: var(--color-yellow)"></i>
           </div>
-          <div class="stat-value" id="kpi-progress">0</div>
+          <div class="stat-value" id="kpi-progress">24</div>
           <div class="stat-subtext">Dalam rencana & berjalan</div>
         </div>
 
@@ -85,7 +85,7 @@
             <span>Completion Rate</span>
             <i class="ri-pie-chart-2-line" style="color: var(--color-purple)"></i>
           </div>
-          <div class="stat-value" id="kpi-rate">0%</div>
+          <div class="stat-value" id="kpi-rate">28%</div>
           <div class="stat-subtext">Pencapaian proyek aktif</div>
         </div>
       </section>
@@ -93,7 +93,7 @@
       <!-- Visual Charts Section -->
       <section class="charts-section">
         <div class="chart-card">
-          <h3><i class="ri-bar-chart-fill" style="color: var(--color-blue)"></i> Distribution Proyek Aktif per Bulan (Timeline Period Jan-Dec)</h3>
+          <h3><i class="ri-bar-chart-fill" style="color: var(--color-blue)"></i> Distribusi Progress & Target UAT Proyek Digitalisasi per Bulan</h3>
           <div class="chart-container">
             <canvas id="timelineChart"></canvas>
           </div>
@@ -234,7 +234,7 @@
   </div>
 
   <!-- App Data & Scripts -->
-  <script src="data.js?v=2.0"></script>
-  <script src="app.js?v=2.0"></script>
+  <script src="data.js?v=3.0"></script>
+  <script src="app.js?v=3.0"></script>
 </body>
 </html>
