@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Digitalisasi & Gantt Timeline SDLC</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Remix Icon CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="dashboard-container">
+    
+    <!-- Top Header Bar -->
+    <header class="header-bar">
+      <div class="header-title-group">
+        <h1><i class="ri-dashboard-3-line"></i> Dashboard Digitalisasi Roadmap & Gantt Chart</h1>
+        <p>Pemantauan 60 Inisiatif Proyek Digitalisasi, Timeline Target & Actual, serta Breakdown SDLC Stage (10-30-50-10)</p>
+      </div>
+      <div class="header-actions">
+        <button class="btn" id="theme-toggle-btn">
+          <i class="ri-sun-line"></i> Light Mode
+        </button>
+        <button class="btn btn-primary" id="btnExportCsv">
+          <i class="ri-download-cloud-2-line"></i> Export Data CSV
+        </button>
+      </div>
+    </header>
+
+    <!-- Navigation Tabs / Multi-page Menu -->
+    <nav class="nav-tabs-bar">
+      <button class="nav-tab active" data-page="dashboard">
+        <i class="ri-layout-grid-fill"></i> Dashboard Utama & Gantt Chart
+      </button>
+      <button class="nav-tab" data-page="reports">
+        <i class="ri-file-list-3-line"></i> Detail & Laporan Proyek
+      </button>
+      <button class="nav-tab" data-page="master">
+        <i class="ri-database-2-line"></i> Master Data & Pengaturan
+      </button>
+    </nav>
+
+    <!-- Page 1: Dashboard Utama (Active by default) -->
+    <div id="page-dashboard" class="page-view active">
+      
+      <!-- KPI Metric Cards -->
+      <section class="stats-grid">
+        <div class="stat-card total">
+          <div class="stat-header">
+            <span>Total Digitalisasi</span>
+            <i class="ri-folders-line" style="color: var(--color-blue)"></i>
+          </div>
+          <div class="stat-value" id="kpi-total">60</div>
+          <div class="stat-subtext">Semua inisiatif terdaftar</div>
+        </div>
+
+        <div class="stat-card done">
+          <div class="stat-header">
+            <span>Selesai (Done)</span>
+            <i class="ri-checkbox-circle-line" style="color: var(--color-green)"></i>
+          </div>
+          <div class="stat-value" id="kpi-done">0</div>
+          <div class="stat-subtext">Proyek siap operasional</div>
+        </div>
+
+        <div class="stat-card in-progress">
+          <div class="stat-header">
+            <span>Planned / In Progress</span>
+            <i class="ri-time-line" style="color: var(--color-yellow)"></i>
+          </div>
+          <div class="stat-value" id="kpi-progress">0</div>
+          <div class="stat-subtext">Dalam rencana & berjalan</div>
+        </div>
+
+        <div class="stat-card rate">
+          <div class="stat-header">
+            <span>Completion Rate</span>
+            <i class="ri-pie-chart-2-line" style="color: var(--color-purple)"></i>
+          </div>
+          <div class="stat-value" id="kpi-rate">0%</div>
+          <div class="stat-subtext">Pencapaian proyek aktif</div>
+        </div>
+      </section>
+
+      <!-- Visual Charts Section -->
+      <section class="charts-section">
+        <div class="chart-card">
+          <h3><i class="ri-bar-chart-fill" style="color: var(--color-blue)"></i> Distribution Proyek Aktif per Bulan (Timeline Period Jan-Dec)</h3>
+          <div class="chart-container">
+            <canvas id="timelineChart"></canvas>
+          </div>
+        </div>
+
+        <div class="chart-card">
+          <h3><i class="ri-donut-chart-fill" style="color: var(--color-green)"></i> Status Progress Digitalisasi</h3>
+          <div class="chart-container">
+            <canvas id="statusChart"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <!-- Toolbar & Filters -->
+      <section class="toolbar">
+        <div class="search-box">
+          <i class="ri-search-line"></i>
+          <input type="text" id="searchInput" class="search-input" placeholder="Cari nama digitalisasi atau nomor...">
+        </div>
+
+        <div class="filter-group">
+          <select id="filterStatus" class="filter-select">
+            <option value="all">Semua Status</option>
+            <option value="Done">Status: Done</option>
+            <option value="Progress">Status: Planned / In Progress</option>
+          </select>
+
+          <button class="btn" id="btnExpandAll" title="Buka Detail SDLC Semua Proyek">
+            <i class="ri-expand-vertical-line"></i> Expand All SDLC
+          </button>
+
+          <button class="btn" id="btnCollapseAll" title="Tutup Detail SDLC">
+            <i class="ri-contract-vertical-line"></i> Collapse All
+          </button>
+
+          <!-- Legend Key -->
+          <div class="legend-container">
+            <div class="legend-item">
+              <span class="legend-color legend-target"></span> Target Line
+            </div>
+            <div class="legend-item">
+              <span class="legend-color legend-actual"></span> Actual Line
+            </div>
+            <div class="legend-item">
+              <span class="legend-color legend-sdlc"></span> SDLC Stages
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Main Gantt Chart Table (With Scrollable Container) -->
+      <section class="gantt-section">
+        <div class="gantt-header-title">
+          <h3><i class="ri-table-line"></i> Master Gantt Chart Timeline (Scrollable View)</h3>
+          <span class="gantt-scroll-hint"><i class="ri-scroll-to-bottom-line"></i> Scroll secara vertikal untuk melihat 60 proyek</span>
+        </div>
+        <div class="gantt-wrapper">
+          <table class="gantt-table">
+            <thead>
+              <tr>
+                <th class="col-no">No</th>
+                <th class="col-name">Nama Digitalisasi</th>
+                <th class="col-stage">Line / SDLC Stage</th>
+                <th class="col-status">Status</th>
+                <th class="col-month">Jan</th>
+                <th class="col-month">Feb</th>
+                <th class="col-month">Mar</th>
+                <th class="col-month">Apr</th>
+                <th class="col-month">May</th>
+                <th class="col-month">Jun</th>
+                <th class="col-month">Jul</th>
+                <th class="col-month">Aug</th>
+                <th class="col-month">Sep</th>
+                <th class="col-month">Oct</th>
+                <th class="col-month">Nov</th>
+                <th class="col-month">Dec</th>
+              </tr>
+            </thead>
+            <tbody id="gantt-tbody">
+              <!-- Dynamic Rows populated by app.js -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Additional Advanced Analytics & Progress Section -->
+      <section class="additional-charts-grid">
+        <!-- Chart 3: Quarterly Progress (Q1 - Q4 Target vs Completed) -->
+        <div class="chart-card">
+          <h3><i class="ri-calendar-check-fill" style="color: var(--color-green)"></i> Progress Capaian Per Kuartal (Q1 - Q4)</h3>
+          <div class="chart-container">
+            <canvas id="quarterChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Chart 4: SDLC Workload Distribution -->
+        <div class="chart-card">
+          <h3><i class="ri-stack-fill" style="color: var(--color-yellow)"></i> Beban Alur Kerja per Tahap SDLC</h3>
+          <div class="chart-container">
+            <canvas id="sdlcChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Chart 5: S-Curve / Cumulative Target vs Actual Completion -->
+        <div class="chart-card">
+          <h3><i class="ri-line-chart-fill" style="color: var(--color-purple)"></i> S-Curve Akumulasi Rencana Target Selesai</h3>
+          <div class="chart-container">
+            <canvas id="scurveChart"></canvas>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Page 2: Detail & Laporan Proyek (Placeholder) -->
+    <div id="page-reports" class="page-view">
+      <div class="placeholder-card">
+        <div class="placeholder-icon">
+          <i class="ri-file-chart-line"></i>
+        </div>
+        <h2>Halaman Detail & Laporan Proyek</h2>
+        <p>Data belum tersedia. Halaman ini disiapkan untuk laporan mendalam, analisis dokumen, dan audit pencapaian digitalisasi.</p>
+        <span class="placeholder-badge"><i class="ri-information-line"></i> Halaman Kosong (Placeholder)</span>
+      </div>
+    </div>
+
+    <!-- Page 3: Master Data & Pengaturan (Placeholder) -->
+    <div id="page-master" class="page-view">
+      <div class="placeholder-card">
+        <div class="placeholder-icon">
+          <i class="ri-database-2-line"></i>
+        </div>
+        <h2>Halaman Master Data & Pengaturan</h2>
+        <p>Data belum tersedia. Halaman ini disiapkan untuk entri data baru, pengaturan parameter SDLC, serta manajemen akses pengguna.</p>
+        <span class="placeholder-badge"><i class="ri-information-line"></i> Halaman Kosong (Placeholder)</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- App Data & Scripts -->
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
