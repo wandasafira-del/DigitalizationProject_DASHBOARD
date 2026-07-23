@@ -160,9 +160,10 @@ body {
 }
 
 .stat-card.total::before { background: var(--color-blue); }
-.stat-card.done::before { background: var(--color-green); }
+.stat-card.done-mtd::before { background: var(--color-green); }
+.stat-card.done-ytd::before { background: #059669; }
 .stat-card.in-progress::before { background: var(--color-yellow); }
-.stat-card.rate::before { background: var(--color-purple); }
+.stat-card.queue::before { background: var(--color-purple); }
 
 .stat-header {
   display: flex;

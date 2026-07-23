@@ -47,16 +47,11 @@ function updateThemeIcon(theme) {
 
 // KPI Calculations
 function renderKPIs() {
-  const total = 60;
-  const doneCount = 17;
-  const progressCount = 24;
-  const queueCount = 19;
-  const rate = Math.round((doneCount / total) * 100);
-
-  document.getElementById('kpi-total').textContent = total;
-  document.getElementById('kpi-done').textContent = doneCount;
-  document.getElementById('kpi-progress').textContent = progressCount;
-  document.getElementById('kpi-rate').textContent = `${rate}%`;
+  document.getElementById('kpi-total').textContent = '60';
+  if (document.getElementById('kpi-done-mtd')) document.getElementById('kpi-done-mtd').textContent = '13';
+  if (document.getElementById('kpi-done-ytd')) document.getElementById('kpi-done-ytd').textContent = '17';
+  if (document.getElementById('kpi-progress')) document.getElementById('kpi-progress').textContent = '24';
+  if (document.getElementById('kpi-queue')) document.getElementById('kpi-queue').textContent = '19';
 }
 
 // Charts Initialization

@@ -17,7 +17,7 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <!-- Custom CSS -->
-  <link rel="stylesheet" href="styles.css?v=3.0">
+  <link rel="stylesheet" href="styles.css?v=3.1">
 </head>
 <body>
   <div class="dashboard-container">
@@ -59,34 +59,43 @@
             <i class="ri-folders-line" style="color: var(--color-blue)"></i>
           </div>
           <div class="stat-value" id="kpi-total">60</div>
-          <div class="stat-subtext">Semua inisiatif terdaftar</div>
+          <div class="stat-subtext">Total 59 Planned Initiatives + 1 Additional Project</div>
         </div>
 
-        <div class="stat-card done">
+        <div class="stat-card done-mtd">
           <div class="stat-header">
-            <span>Selesai (Done)</span>
+            <span>Done MTD</span>
             <i class="ri-checkbox-circle-line" style="color: var(--color-green)"></i>
           </div>
-          <div class="stat-value" id="kpi-done">17</div>
-          <div class="stat-subtext">Proyek siap operasional</div>
+          <div class="stat-value" id="kpi-done-mtd">13</div>
+          <div class="stat-subtext">Pencapaian Month to Date</div>
+        </div>
+
+        <div class="stat-card done-ytd">
+          <div class="stat-header">
+            <span>Done YTD</span>
+            <i class="ri-calendar-check-line" style="color: #059669"></i>
+          </div>
+          <div class="stat-value" id="kpi-done-ytd">17</div>
+          <div class="stat-subtext">Pencapaian Year to Date</div>
         </div>
 
         <div class="stat-card in-progress">
           <div class="stat-header">
-            <span>In Progress</span>
+            <span>IN PROGRESS / PLANNED</span>
             <i class="ri-time-line" style="color: var(--color-yellow)"></i>
           </div>
           <div class="stat-value" id="kpi-progress">24</div>
-          <div class="stat-subtext">Dalam rencana & berjalan</div>
+          <div class="stat-subtext">Proyek berjalan & terencana</div>
         </div>
 
-        <div class="stat-card rate">
+        <div class="stat-card queue">
           <div class="stat-header">
-            <span>Completion Rate</span>
-            <i class="ri-pie-chart-2-line" style="color: var(--color-purple)"></i>
+            <span>QUEUE</span>
+            <i class="ri-stack-line" style="color: var(--color-purple)"></i>
           </div>
-          <div class="stat-value" id="kpi-rate">28%</div>
-          <div class="stat-subtext">Pencapaian proyek aktif</div>
+          <div class="stat-value" id="kpi-queue">19</div>
+          <div class="stat-subtext">Proyek dalam antrean</div>
         </div>
       </section>
 
@@ -234,7 +243,7 @@
   </div>
 
   <!-- App Data & Scripts -->
-  <script src="data.js?v=3.0"></script>
-  <script src="app.js?v=3.0"></script>
+  <script src="data.js?v=3.1"></script>
+  <script src="app.js?v=3.1"></script>
 </body>
 </html>
