@@ -407,6 +407,23 @@ body {
   vertical-align: middle;
 }
 
+/* Black grid lines for Gantt Chart in Light Mode */
+[data-theme="light"] .gantt-table {
+  border-top: 1px solid #000000;
+  border-left: 1px solid #000000;
+}
+
+[data-theme="light"] .gantt-table th,
+[data-theme="light"] .gantt-table td {
+  border-bottom: 1px solid #000000;
+  border-right: 1px solid #000000;
+}
+
+[data-theme="light"] .gantt-table th {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
 .gantt-table th {
   background: var(--bg-secondary);
   color: var(--text-muted);
