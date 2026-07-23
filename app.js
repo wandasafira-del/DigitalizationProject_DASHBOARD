@@ -458,7 +458,8 @@ function setupEventListeners() {
 
   document.getElementById('btnExpandAll').addEventListener('click', expandAllProjects);
   document.getElementById('btnCollapseAll').addEventListener('click', collapseAllProjects);
-  document.getElementById('btnExportCsv').addEventListener('click', exportToCsv);
+  const exportBtn = document.getElementById('btnExportCsv');
+  if (exportBtn) exportBtn.addEventListener('click', exportToCsv);
 
   // Page Tab Switching Logic
   const tabs = document.querySelectorAll('.nav-tab');
