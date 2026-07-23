@@ -331,8 +331,9 @@ function renderGantt() {
     const statusBadgeClass = isDone ? 'badge-done' : 'badge-progress';
     const statusLabel = isDone ? 'Done' : 'Planned / In Progress';
     
-    // Collapsed = 2 rows (Target + Actual), Expanded = 6 rows (+ 4 SDLC sub-rows)
-    const rowSpanVal = isExpanded ? 6 : 2;
+    // For Done: 2 rows when collapsed (Target + Actual), 6 rows when expanded (+ 4 SDLC)
+    // For In Progress: 1 row when collapsed (Target), 5 rows when expanded (+ 4 SDLC)
+    const rowSpanVal = isExpanded ? (isDone ? 6 : 5) : (isDone ? 2 : 1);
 
     // 1. Target Line Row (Always visible)
     const trTarget = document.createElement('tr');
@@ -367,23 +368,25 @@ function renderGantt() {
 
     tbody.appendChild(trTarget);
 
-    // 2. Actual Line Row (Always visible)
-    const trActual = document.createElement('tr');
-    trActual.className = 'sdlc-row';
-    let monthCellsActual = '';
-    MONTHS.forEach((m, idx) => {
-      const isActual = idx >= sIdxActual && idx <= eIdxActual;
-      monthCellsActual += `
-        <td class="cell-month">
-          ${isActual ? `<div class="bar-cell bar-actual" title="${p.name} (Actual: ${p.actualStart} - ${p.actualEnd})">Actual</div>` : ''}
-        </td>
+    // 2. Actual Line Row (ONLY rendered for status Done)
+    if (isDone) {
+      const trActual = document.createElement('tr');
+      trActual.className = 'sdlc-row';
+      let monthCellsActual = '';
+      MONTHS.forEach((m, idx) => {
+        const isActual = idx >= sIdxActual && idx <= eIdxActual;
+        monthCellsActual += `
+          <td class="cell-month">
+            ${isActual ? `<div class="bar-cell bar-actual" title="${p.name} (Actual: ${p.actualStart} - ${p.actualEnd})">Actual</div>` : ''}
+          </td>
+        `;
+      });
+      trActual.innerHTML = `
+        <td class="col-stage"><strong>Actual Line</strong></td>
+        ${monthCellsActual}
       `;
-    });
-    trActual.innerHTML = `
-      <td class="col-stage"><strong>Actual Line</strong></td>
-      ${monthCellsActual}
-    `;
-    tbody.appendChild(trActual);
+      tbody.appendChild(trActual);
+    }
 
     // 3. The 4 SDLC Sub-Rows (Hidden by default, shown when dropdown is clicked)
     if (isExpanded) {
