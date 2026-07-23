@@ -10,10 +10,8 @@ let currentFilterStatus = 'all';
 let currentSearchQuery = '';
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Expand first 5 projects by default
-  for (let i = 1; i <= 5; i++) {
-    expandedProjects.add(i);
-  }
+  // All SDLC rows hidden by default until user clicks dropdown
+  expandedProjects.clear();
 
   initTheme();
   renderKPIs();
@@ -330,9 +328,13 @@ function renderGantt() {
     const eIdxActual = MONTHS.indexOf(p.actualEnd);
 
     const isDone = (p.status === 'Done');
-    const rowSpanVal = isExpanded ? (isDone ? '6' : '5') : '1';
+    const statusBadgeClass = isDone ? 'badge-done' : 'badge-progress';
+    const statusLabel = isDone ? 'Done' : 'Planned / In Progress';
+    
+    // Collapsed = 2 rows (Target + Actual), Expanded = 6 rows (+ 4 SDLC sub-rows)
+    const rowSpanVal = isExpanded ? 6 : 2;
 
-    // Master Target Line Row
+    // 1. Target Line Row (Always visible)
     const trTarget = document.createElement('tr');
     trTarget.className = 'project-master-row';
 
@@ -346,15 +348,12 @@ function renderGantt() {
       `;
     });
 
-    const statusBadgeClass = isDone ? 'badge-done' : 'badge-progress';
-    const statusLabel = isDone ? 'Done' : 'Planned / In Progress';
-
     trTarget.innerHTML = `
       <td class="col-no" rowspan="${rowSpanVal}">
         <strong>${p.no}</strong>
       </td>
       <td class="col-name" rowspan="${rowSpanVal}">
-        <button class="toggle-btn ${isExpanded ? 'expanded' : ''}" onclick="toggleExpand(${p.no})">
+        <button class="toggle-btn ${isExpanded ? 'expanded' : ''}" onclick="toggleExpand(${p.no})" title="${isExpanded ? 'Sembunyikan 4 Baris SDLC' : 'Tampilkan 4 Baris SDLC'}">
           <i class="ri-arrow-right-s-line"></i>
         </button>
         <span class="project-title-clickable" onclick="openProjectModal(${p.no})">${p.name}</span>
@@ -368,29 +367,26 @@ function renderGantt() {
 
     tbody.appendChild(trTarget);
 
-    // If expanded, append Actual Line (only for Done projects) + 4 SDLC stage rows
-    if (isExpanded) {
-      if (isDone) {
-        // 1. Actual Line Row (Only for Done status)
-        const trActual = document.createElement('tr');
-        trActual.className = 'sdlc-row';
-        let monthCellsActual = '';
-        MONTHS.forEach((m, idx) => {
-          const isActual = idx >= sIdxActual && idx <= eIdxActual;
-          monthCellsActual += `
-            <td class="cell-month">
-              ${isActual ? `<div class="bar-cell bar-actual" title="${p.name} (Actual: ${p.actualStart} - ${p.actualEnd})">Actual</div>` : ''}
-            </td>
-          `;
-        });
-        trActual.innerHTML = `
-          <td class="col-stage"><strong>Actual Line</strong></td>
-          ${monthCellsActual}
-        `;
-        tbody.appendChild(trActual);
-      }
+    // 2. Actual Line Row (Always visible)
+    const trActual = document.createElement('tr');
+    trActual.className = 'sdlc-row';
+    let monthCellsActual = '';
+    MONTHS.forEach((m, idx) => {
+      const isActual = idx >= sIdxActual && idx <= eIdxActual;
+      monthCellsActual += `
+        <td class="cell-month">
+          ${isActual ? `<div class="bar-cell bar-actual" title="${p.name} (Actual: ${p.actualStart} - ${p.actualEnd})">Actual</div>` : ''}
+        </td>
+      `;
+    });
+    trActual.innerHTML = `
+      <td class="col-stage"><strong>Actual Line</strong></td>
+      ${monthCellsActual}
+    `;
+    tbody.appendChild(trActual);
 
-      // SDLC Rows config
+    // 3. The 4 SDLC Sub-Rows (Hidden by default, shown when dropdown is clicked)
+    if (isExpanded) {
       const stagesConfig = [
         { label: 'Gathering Requirement', activeIdxs: sdlc.gathering },
         { label: 'Functional Design', activeIdxs: sdlc.functional },
