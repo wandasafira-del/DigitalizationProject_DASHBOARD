@@ -507,7 +507,7 @@ body {
 
 /* Row variations */
 .project-master-row {
-  background: rgba(15, 23, 42, 0.4);
+  background: rgba(30, 41, 59, 0.5);
   font-weight: 600;
 }
 
@@ -516,9 +516,40 @@ body {
 }
 
 .sdlc-row {
-  background: rgba(0, 0, 0, 0.15);
+  background: rgba(15, 23, 42, 0.3);
   font-size: 0.8rem;
   color: var(--text-muted);
+}
+
+.sdlc-row:hover {
+  background: var(--bg-hover);
+}
+
+/* Light Mode Overrides for Gantt Chart (Terang secara default, Gelap saat hover) */
+[data-theme="light"] .project-master-row {
+  background: #ffffff;
+  color: #0f172a;
+}
+
+[data-theme="light"] .project-master-row:hover,
+[data-theme="light"] .project-master-row:hover td {
+  background: #94a3b8 !important; /* Gelap saat di-hover */
+  color: #ffffff !important;
+}
+
+[data-theme="light"] .sdlc-row {
+  background: #f8fafc;
+  color: #0f172a;
+}
+
+[data-theme="light"] .sdlc-row:hover,
+[data-theme="light"] .sdlc-row:hover td {
+  background: #94a3b8 !important; /* Gelap saat di-hover */
+  color: #ffffff !important;
+}
+
+[data-theme="light"] .col-stage {
+  color: #0f172a;
 }
 
 .sdlc-row td {
