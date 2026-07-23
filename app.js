@@ -213,7 +213,7 @@ function renderCharts() {
   sdlcChartInstance = new Chart(ctxSdlc, {
     type: 'polarArea',
     data: {
-      labels: ['Gathering Req (10%)', 'Functional Design (30%)', 'Development (50%)', 'UAT (10%)'],
+      labels: ['Gathering Requirement', 'Functional Design', 'Development', 'UAT'],
       datasets: [{
         data: [gCnt, fCnt, dCnt, uCnt],
         backgroundColor: [
@@ -515,22 +515,22 @@ function openProjectModal(projectNo) {
             </div>
           </div>
 
-          <h3 style="font-size: 0.95rem; margin-top: 8px;">Breakdown SDLC Sub-Lines (Proposional 10-30-50-10):</h3>
+          <h3 style="font-size: 0.95rem; margin-top: 8px;">Breakdown SDLC Sub-Lines:</h3>
           <div class="sdlc-breakdown-list">
             <div class="sdlc-breakdown-item">
-              <span><strong>Gathering Requirement (10%)</strong></span>
+              <span><strong>Gathering Requirement</strong></span>
               <span class="badge badge-progress">${getMonthsStr(sdlc.gathering)}</span>
             </div>
             <div class="sdlc-breakdown-item">
-              <span><strong>Functional Design (30%)</strong></span>
+              <span><strong>Functional Design</strong></span>
               <span class="badge badge-progress">${getMonthsStr(sdlc.functional)}</span>
             </div>
             <div class="sdlc-breakdown-item">
-              <span><strong>Development (50%)</strong></span>
+              <span><strong>Development</strong></span>
               <span class="badge badge-progress">${getMonthsStr(sdlc.dev)}</span>
             </div>
             <div class="sdlc-breakdown-item">
-              <span><strong>UAT (10%)</strong></span>
+              <span><strong>UAT</strong></span>
               <span class="badge badge-progress">${getMonthsStr(sdlc.uat)}</span>
             </div>
           </div>
